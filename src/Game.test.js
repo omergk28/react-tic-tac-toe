@@ -30,7 +30,7 @@ test('shows status of next player', () => {
     expect(status).toHaveTextContent('Next player is X');
 });
 
-test('shows status of winner', async () => {
+test('shows status of winner and highlights winning line', () => {
     render(<Game/>);
     const status = screen.getByTestId('status');
     expect(status).toHaveTextContent('Next player is X');
@@ -49,9 +49,15 @@ test('shows status of winner', async () => {
     const square8 = screen.getByTestId('square-8');
     fireEvent.click(square8);
     expect(status).toHaveTextContent('Winner is X');
+    expect(square0).toHaveClass('winner-square');
+    expect(square4).toHaveClass('winner-square');
+    expect(square8).toHaveClass('winner-square');
+
+    expect(square1).toHaveClass('square');
+    expect(square2).toHaveClass('square');
 });
 
-test('shows status of draw', async () => {
+test('shows status of draw', () => {
     render(<Game/>);
     const status = screen.getByTestId('status');
     expect(status).toHaveTextContent('Next player is X');
