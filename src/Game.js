@@ -46,10 +46,10 @@ export default function Game() {
 
     return (<div className="game" data-testid="game">
         <div className="game-board">
+            <div className="status" data-testid="status">{status}</div>
             <Board winnerMap={winnerMap} squares={currentSquares} onPlay={handlePlay}/>
         </div>
         <div className="game-info">
-            <div className="status" data-testid="status">{status}</div>
             <ol>{moves}</ol>
         </div>
     </div>);
