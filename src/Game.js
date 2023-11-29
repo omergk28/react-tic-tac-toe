@@ -1,51 +1,5 @@
 import {useState} from "react";
 
-function Square({value, onSquareClicked, index}) {
-    return (<>
-        <button onClick={onSquareClicked} className="square" data-testid={`square-${index}`}>
-            {value}
-        </button>
-    </>);
-}
-
-function Board({player, squares, onPlay}) {
-    function handleClick(index) {
-        if (squares[index] || calculateWinner(squares)) {
-            return;
-        }
-        const newSquares = squares.slice();
-        newSquares[index] = player;
-        onPlay(newSquares);
-    }
-
-    const winner = calculateWinner(squares);
-    let status;
-    if (winner) {
-        status = "Winner is " + winner;
-    } else {
-        status = "Next player is " + player;
-    }
-
-    function BoardRow({rowNumber}) {
-        return <>
-            <div className="board-row" data-testid={'row'+rowNumber}>
-                {[0, 1, 2]
-                    .map(col => col + (rowNumber * 3))
-                    .map(col => <Square key={'column' + col} value={squares[col]} index={col}
-                                        onSquareClicked={() => handleClick(col)}/>)
-                }
-            </div>
-        </>
-    }
-
-    return (<>
-        <div className="status">{status}</div>
-        {[0, 1, 2].map(i => <BoardRow key={'row' + i} rowNumber={i}/>)})
-    </>);
-
-}
-
-
 export default function Game() {
     const [history, setHistory] = useState([Array(9).fill(null)]);
     const [currentMove, setCurrentMove] = useState(0);
@@ -79,6 +33,7 @@ export default function Game() {
 
     return (<div className="game" data-testid="game">
         <div className="game-board">
+            <div className="status" data-testid="status">{calculateStatus(currentSquares, player, moves)}</div>
             <Board player={player} squares={currentSquares} onPlay={handlePlay}/>
         </div>
         <div className="game-info">
@@ -97,4 +52,49 @@ function calculateWinner(squares) {
         }
     }
     return null;
+}
+
+function Board({player, squares, onPlay}) {
+    function handleClick(index) {
+        if (squares[index] || calculateWinner(squares)) {
+            return;
+        }
+        const newSquares = squares.slice();
+        newSquares[index] = player;
+        onPlay(newSquares);
+    }
+
+    return <>
+        {[0, 1, 2].map(i => <BoardRow key={'row' + i} row={i} squares={squares}
+                                      onSquareClick={handleClick}/>)}
+    </>;
+}
+
+function calculateStatus(squares, nextPlayer, moves) {
+    const winner = calculateWinner(squares);
+    if (winner) {
+        return "Winner is " + winner;
+    } else {
+        return moves.length > 9 ? "Draw" : "Next player is " + nextPlayer;
+    }
+}
+
+function BoardRow({row, squares, onSquareClick}) {
+    return <>
+        <div className="board-row" data-testid={'row' + row}>
+            {[0, 1, 2]
+                .map(column => column + (row * 3))
+                .map(squareIndex => <Square key={'column' + squareIndex} value={squares[squareIndex]}
+                                            index={squareIndex}
+                                            onSquareClick={() => onSquareClick(squareIndex)}/>)}
+        </div>
+    </>
+}
+
+function Square({value, onSquareClick, index}) {
+    return (<>
+        <button onClick={onSquareClick} className="square" data-testid={`square-${index}`}>
+            {value}
+        </button>
+    </>);
 }
