@@ -24,10 +24,12 @@ test('shows board rows, clickable squares and game status', () => {
 
 });
 
-test('shows status of next player', () => {
+test('shows status of next player and current move', () => {
     render(<Game/>);
     const status = screen.getByTestId('status');
+    const moveIndicator = screen.getByTestId('move-indicator');
     expect(status).toHaveTextContent('Next player is X');
+    expect(moveIndicator).toHaveTextContent('You are at move 1');
 });
 
 test('shows status of winner and highlights winning line', () => {
@@ -55,9 +57,11 @@ test('shows status of winner and highlights winning line', () => {
 
     expect(square1).toHaveClass('square');
     expect(square2).toHaveClass('square');
+    const moveIndicator = screen.getByTestId('move-indicator');
+    expect(moveIndicator).toHaveTextContent('Game Over');
 });
 
-test('shows status of draw', () => {
+test('shows status of draw and game result', () => {
     render(<Game/>);
     const status = screen.getByTestId('status');
     expect(status).toHaveTextContent('Next player is X');
@@ -88,4 +92,6 @@ test('shows status of draw', () => {
     const square7 = screen.getByTestId('square-7');
     fireEvent.click(square7);
     expect(status).toHaveTextContent('Draw');
+    const moveIndicator = screen.getByTestId('move-indicator');
+    expect(moveIndicator).toHaveTextContent('Game Over');
 });

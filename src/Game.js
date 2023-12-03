@@ -3,6 +3,7 @@ import {useState} from "react";
 export default function Game() {
     const [history, setHistory] = useState([Array(9).fill(null)]);
     const [currentMove, setCurrentMove] = useState(0);
+    const [toggleMove, setToggleMove] = useState(true);
     const player = currentMove % 2 === 0 ? "X" : "O";
     const currentSquares = history[currentMove];
 
@@ -18,9 +19,8 @@ export default function Game() {
     }
 
     function jumpTo(nextMove) {
-        if (nextMove === 0) {
-            setHistory([Array(9).fill(null)]);
-        }
+        const nextHistory = [...history.slice(0, nextMove + 1)];
+        setHistory(nextHistory);
         setCurrentMove(nextMove);
     }
 
@@ -36,8 +36,11 @@ export default function Game() {
         </li>);
     });
 
-    let status;
     const {winner, winnerMap} = calculateWinner(currentSquares);
+
+    let moveIndicator = (currentMove >= 9) || winner ? "Game Over" : "You are at move " + (currentMove + 1);
+
+    let status;
     if (winner) {
         status = "Winner is " + winner;
     } else {
@@ -50,7 +53,11 @@ export default function Game() {
             <Board winnerMap={winnerMap} squares={currentSquares} onPlay={handlePlay}/>
         </div>
         <div className="game-info">
-            <ol>{moves}</ol>
+            <button onClick={() => {
+                setToggleMove(!toggleMove)
+            }}>{toggleMove ? 'Sort Descending' : 'Sort Ascending'}</button>
+            <ul>{toggleMove ? moves : moves.reverse()}</ul>
+            <span data-testid="move-indicator">{moveIndicator}</span>
         </div>
     </div>);
 }
