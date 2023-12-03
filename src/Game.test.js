@@ -95,3 +95,14 @@ test('shows status of draw and game result', () => {
     const moveIndicator = screen.getByTestId('move-indicator');
     expect(moveIndicator).toHaveTextContent('Game Over');
 });
+
+test('sorts moves in proper toggle order', () => {
+    render(<Game/>);
+    const toggleButton = screen.getByTestId('sortToggle');
+    expect(toggleButton).toBeInTheDocument();
+    expect(toggleButton).toHaveTextContent('Sort Descending');
+    fireEvent.click(toggleButton);
+    expect(toggleButton).toHaveTextContent('Sort Ascending');
+    fireEvent.click(toggleButton);
+    expect(toggleButton).toHaveTextContent('Sort Descending');
+});

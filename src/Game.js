@@ -53,9 +53,9 @@ export default function Game() {
             <Board winnerMap={winnerMap} squares={currentSquares} onPlay={handlePlay}/>
         </div>
         <div className="game-info">
-            <button onClick={() => {
+            <button data-testid={"sortToggle"} onClick={() => {
                 setToggleSort(!toggleSort)
-            }}>{toggleSort ? 'Sort Descending' : 'Sort Ascending'}</button>
+            }}>{toggleSort ? "Sort Descending" : "Sort Ascending"}</button>
             <ul>{toggleSort ? moves : moves.reverse()}</ul>
             <span data-testid="move-indicator">{moveIndicator}</span>
         </div>
