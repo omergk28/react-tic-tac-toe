@@ -3,7 +3,7 @@ import {useState} from "react";
 export default function Game() {
     const [history, setHistory] = useState([Array(9).fill(null)]);
     const [currentMove, setCurrentMove] = useState(0);
-    const [toggleMove, setToggleMove] = useState(true);
+    const [toggleSort, setToggleSort] = useState(true);
     const player = currentMove % 2 === 0 ? "X" : "O";
     const currentSquares = history[currentMove];
 
@@ -54,9 +54,9 @@ export default function Game() {
         </div>
         <div className="game-info">
             <button onClick={() => {
-                setToggleMove(!toggleMove)
-            }}>{toggleMove ? 'Sort Descending' : 'Sort Ascending'}</button>
-            <ul>{toggleMove ? moves : moves.reverse()}</ul>
+                setToggleSort(!toggleSort)
+            }}>{toggleSort ? 'Sort Descending' : 'Sort Ascending'}</button>
+            <ul>{toggleSort ? moves : moves.reverse()}</ul>
             <span data-testid="move-indicator">{moveIndicator}</span>
         </div>
     </div>);
