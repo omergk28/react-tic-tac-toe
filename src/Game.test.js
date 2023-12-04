@@ -106,3 +106,18 @@ test('sorts moves in proper toggle order', () => {
     fireEvent.click(toggleButton);
     expect(toggleButton).toHaveTextContent('Sort Descending');
 });
+
+test('shows coordinates of move', () => {
+    render(<Game/>);
+    const square0 = screen.getByTestId('square-0');
+    fireEvent.click(square0);
+    const moveIndicator = screen.getByTestId('move-indicator');
+    expect(moveIndicator).toHaveTextContent('You are at move 2');
+    const move1 = screen.getByTestId('move1');
+    expect(move1).toHaveTextContent('Go to move 1 (1,1)');
+    const square1 = screen.getByTestId('square-1');
+    fireEvent.click(square1);
+    expect(moveIndicator).toHaveTextContent('You are at move 3');
+    const move2 = screen.getByTestId('move2');
+    expect(move2).toHaveTextContent('Go to move 2 (2,1)');
+});

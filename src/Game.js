@@ -2,17 +2,22 @@ import {useState} from "react";
 
 export default function Game() {
     const [history, setHistory] = useState([Array(9).fill(null)]);
+    const [moveCoordinates, setMoveCoordinates] = useState([Array(9).fill(null)]);
     const [currentMove, setCurrentMove] = useState(0);
     const [toggleSort, setToggleSort] = useState(true);
     const player = currentMove % 2 === 0 ? "X" : "O";
     const currentSquares = history[currentMove];
 
     function handlePlay(index) {
-        if (currentSquares[index]) {
+        if (currentSquares[index] || calculateWinner(currentSquares).winner) {
             return;
         }
         const nextSquares = currentSquares.slice();
         nextSquares[index] = player;
+
+        const nextMoveCoordinates = [...moveCoordinates.slice(), {x: (index % 3) + 1, y: Math.floor(index / 3) + 1}];
+        setMoveCoordinates(nextMoveCoordinates);
+
         const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
         setHistory(nextHistory);
         setCurrentMove(nextHistory.length - 1);
@@ -27,12 +32,12 @@ export default function Game() {
     const moves = history.map((squares, move) => {
         let description;
         if (move > 0) {
-            description = "Go to move # " + move;
+            description = "Go to move " + move + " (" + moveCoordinates[move].x + "," + moveCoordinates[move].y + ")";
         } else {
             description = "Go to game start";
         }
         return (<li key={'move' + move}>
-            <button key={'jump' + move} onClick={() => jumpTo(move)}>{description}</button>
+            <button key={'jump' + move} data-testid={`move${move}`} onClick={() => jumpTo(move)}>{description}</button>
         </li>);
     });
 
